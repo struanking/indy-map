@@ -9,16 +9,15 @@
 define([
     'backbone',
     'common/settings',
+    'collections/locationCollection',
     'common/googleMapOverlay'
-], function (Backbone, settings, googleMapOverlay) {
+], function (Backbone, settings, locations, googleMapOverlay) {
 
     'use strict';
 
     var MapView = Backbone.View.extend({
 
-        initialize: function (options) {
-            this.collection = options.collection || {};
-
+        initialize: function () {
             var that = this,
                 gmap = settings.gmap,
                 mapOptions = {
@@ -34,15 +33,10 @@ define([
             this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
             this.map.mapTypes.set('map_style', gmap.style); // Associate the styled map with the MapTypeId
             this.map.setMapTypeId('map_style'); // Set it to display
+            
             googleMapOverlay.overlay = googleMapOverlay.init(this.map);
-
-            google.maps.event.addListener(this.map, 'dragend', function () {
-                that.gmapChanged();
-            });
-
-            google.maps.event.addListener(this.map, 'zoom_changed', function () {
-                that.gmapChanged();
-            });
+            google.maps.event.addListener(this.map, 'dragend', that.gmapChanged);
+            google.maps.event.addListener(this.map, 'zoom_changed', that.gmapChanged);
         },
 
         /**
@@ -80,7 +74,8 @@ define([
         },
 
         gmapChanged: function () {
-            var firstLocation = this.collection.at(0);
+            console.log('gmapChanged');
+            var firstLocation = locations.at(0);
             firstLocation.set('clearCanvas', true);
             googleMapOverlay.overlay.alignDrawingPane();
             firstLocation.set('reDrawRoute', true);

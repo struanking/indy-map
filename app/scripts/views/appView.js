@@ -7,7 +7,7 @@ define([
     'views/locationView',
     'views/drawView',
     'text!templates/app.html'
-], function (_, Backbone, settings, util, Locations, LocationView, DrawView, tpl) {
+], function (_, Backbone, settings, util, locations, LocationView, DrawView, tpl) {
     
     'use strict';
 
@@ -24,52 +24,53 @@ define([
 
         initialize: function () {
             this.render();
-            this.listenTo(Locations, 'add', this.add);
-            this.listenTo(Locations, 'reset', this.addAll);
-            this.listenTo(Locations, 'change:drawing', this.readyHandler);
-            this.drawView = new DrawView({collection: Locations});
-            this.reset(); // bootstrap default locations
+            this.listenTo(locations, 'add', this.add);
+            this.listenTo(locations, 'reset', this.addAll);
+            this.listenTo(locations, 'change:drawing', this.readyHandler);
+            this.drawView = new DrawView();
+            this.addAll();
         },
 
         render: function () {
             this.$el.append(this.template);
-            this.$journeyLocations = this.$el.find('.journey-locations');
+            this.$journeylocations = this.$el.find('.journey-locations');
         },
 
+        /* @method add
+         * @description 
+         * @param location The model to create the view for
+         */
         add: function (location) {
-            var view = new LocationView({model: location, collection: Locations}),
+            var view = new LocationView({model: location}),
                 html = view.render().el,
-                index = Locations.indexOf(location),
+                index = locations.indexOf(location),
                 autocomplete;
 
             // Insert into list or append
-            if (this.$journeyLocations.find('li').length > index) {
-                this.$journeyLocations.find('li:eq(' + (index) + ')').before(html);
+            if (this.$journeylocations.find('li').length > index) {
+                this.$journeylocations.find('li:eq(' + (index) + ')').before(html);
             } else {
-                this.$journeyLocations.append(html);
+                this.$journeylocations.append(html);
             }
 
             util.selectField(index);
-
             autocomplete = new google.maps.places.Autocomplete($(html).find('input')[0]);
-            //autocomplete.bindTo('bounds', this.drawView.mapView.map);
         },
 
-        // Add all items in the Locations collection at once.
+        // Add all items in the locations collection at once.
         addAll: function () {
-            this.$journeyLocations.empty();
-            Locations.each(this.add, this);
-            util.selectField();
+            this.$journeylocations.empty();
+            locations.each(this.add, this);
         },
 
         createJourney: function (e) {
             e.preventDefault();
             // Mark collection as ready to draw journey
-            Locations.at(0).set('drawing', true);
+            locations.at(0).set('drawing', true);
         },
 
         readyHandler: function () {
-            var firstLocation = Locations.at(0);
+            var firstLocation = locations.at(0);
             
             if (firstLocation.get('drawing')) {
                 // Disable events during drawing of route
@@ -84,7 +85,7 @@ define([
             if (e) {
                 e.preventDefault();
             }
-            Locations.reset(settings.defaultLocations || {});
+            locations.reset(settings.defaultlocations || {});
         }
     });
 

@@ -11,8 +11,9 @@ define([
     'backbone',
     'common/settings',
     'common/util',
+    'collections/locationCollection',
     './mapView'
-], function (_, Backbone, settings, util, MapView) {
+], function (_, Backbone, settings, util, locations, MapView) {
     
     'use strict';
 
@@ -21,16 +22,15 @@ define([
         el: '#map',
 
         initialize: function (options) {
-            this.collection = options.collection || {};
-            this.mapView = new MapView({collection: this.collection});
-            this.listenTo(this.collection, 'reset', this.clearCanvas);
-            this.listenTo(this.collection, 'change:clearCanvas', this.clearCanvas);
-            this.listenTo(this.collection, 'change:reDrawRoute', this.reDrawRoute);
-            this.listenTo(this.collection, 'change:drawing', this.render);
+            this.mapView = new MapView();
+            this.listenTo(locations, 'reset', this.clearCanvas);
+            this.listenTo(locations, 'change:clearCanvas', this.clearCanvas);
+            this.listenTo(locations, 'change:reDrawRoute', this.reDrawRoute);
+            this.listenTo(locations, 'change:drawing', this.render);
         },
 
         render: function () {
-            this.firstLocation = this.collection.at(0);
+            this.firstLocation = locations.at(0);
             this.canvas = this.canvas || this.$el.find('canvas')[0];
             
             if (!this.firstLocation.get('drawing')) {
@@ -49,7 +49,7 @@ define([
         * @return The length of the hypoteneuse
         */
         hypoteneuse: function (start) {
-            var paths = this.collection.models,
+            var paths = locations.models,
                 A = paths[start], // paths.get(start) or at() ??
                 B = paths[start + 1],
                 dX = B.get('x') - A.get('x'),
@@ -66,7 +66,7 @@ define([
         destinationLabel: function (position, leg) {
             var context = this.canvas.getContext('2d'),
                 fontSize = 5.75 * this.mapView.map.getZoom(),
-                label = this.collection.models[leg].get('name'),
+                label = locations.models[leg].get('name'),
                 x = position.x,
                 y = position.y - 6;
 
@@ -168,7 +168,7 @@ define([
         drawRoute: function (currentleg) {
             var that = this,
                 leg = currentleg || 0,
-                paths = this.collection.models,
+                paths = locations.models,
                 legLength,
                 start = {},
                 end = {},
@@ -214,7 +214,7 @@ define([
                 return;
             }
 
-            var models = this.collection.models,
+            var models = locations.models,
                 max = models.length,
                 start,
                 end,
@@ -248,7 +248,7 @@ define([
         },
 
         validateData: function () {
-            this.collection.removeUnsavedModels();
+            locations.removeUnsavedModels();
             return this;
         },
 
@@ -258,11 +258,10 @@ define([
         },
 
         setCoordinates: function () {
-            var locations = this.collection.models,
-                pixels,
+            var pixels,
                 that = this;
 
-            _.each(locations, function (model) {
+            _.each(locations.models, function (model) {
                 pixels = that.getCoordinates(model.get('latlng'));
                 model.set({'x': pixels.x, 'y': pixels.y}, {silent: true});
             });

@@ -3,8 +3,9 @@ define([
     'backbone',
     'common/util',
     'common/settings',
+    'collections/locationCollection',
     'text!templates/location.html'
-], function (_, Backbone, util, settings, tpl) {
+], function (_, Backbone, util, settings, Locations, tpl) {
 
     'use strict';
 
@@ -21,8 +22,8 @@ define([
             'click .js-clear-field': 'clear'
         },
 
-        initialize: function (options) {
-            this.collection = options.collection || {};
+        initialize: function () {
+            //this.collection = options.collection || {};
             this.listenTo(this.model, 'destroy', this.remove);
             this.listenTo(this.model, 'change', this.render);
         },
@@ -34,8 +35,8 @@ define([
         },
 
         add: function () {
-            var index = this.collection.indexOf(this.model) + 1;
-            this.collection.add({}, {at: index});
+            var index = Locations.indexOf(this.model) + 1;
+            Locations.add({}, {at: index});
         },
 
         delete: function () {
