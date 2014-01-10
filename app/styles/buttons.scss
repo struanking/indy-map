@@ -1,0 +1,82 @@
+/* Button styles */
+.btn {
+    background: -webkit-linear-gradient(top, #999 30%, #666 100%);
+    background: linear-gradient(to bottom, #999 0%, #666 100%);
+    color: #FFF;
+    margin: 0;
+    padding: 0.3rem 0.5rem;
+    border-radius: 16px;
+    border: none;
+    font-size: 95%;
+    font-weight: normal;
+    box-shadow: 1px 1px 2px #111;
+    text-shadow: 1px 1px 0 #222;
+}
+.btn:hover {
+    box-shadow: 3px 3px 5px #222;
+    background: -webkit-linear-gradient(top, #999 10%, #555 100%);
+    background: linear-gradient(to bottom, #999 10%, #555 100%);
+}
+.btn:focus,
+.btn:active { outline: none; }
+
+.btn-build-journey {
+    background: -webkit-linear-gradient(top, #8BABC9 20%, #688197 100%);
+    background: linear-gradient(to bottom, #8BABC9 20%, #688197 100%);
+    margin-right: 0.8rem;
+}
+.btn-build-journey:hover {
+    background: -webkit-linear-gradient(top, #8BABC9 10%, #345D81 100%);
+    background: linear-gradient(to bottom, #8BABC9 10%, #345D81 100%);
+}
+.btn-build-journey:focus,
+.btn-build-journey:active {
+    background: -webkit-linear-gradient(top, #345D81 10%, #8BABC9 100%);
+    background: linear-gradient(to bottom, #345D81 10%, #8BABC9 100%);
+}
+
+.btn-icn {
+    position: relative;
+    width: 1.4rem;
+    height: 1.4rem;
+    line-height: 0.8;
+    margin-left: 0.5rem;
+}
+
+.btn-add-location {
+    background: -webkit-linear-gradient(top, #7D976C 30%, #536B48 100%);
+    background: linear-gradient(to bottom, #7D976C 30%, #536B48 100%);
+    text-indent: -1px;
+}
+.btn-add-location:hover {
+    background: -webkit-linear-gradient(top, #7D976C 10%, #536B48 100%);
+    background: linear-gradient(to bottom, #7D976C 10%, #536B48 100%);
+}
+.btn-add-location:focus,
+.btn-add-location:active {
+    background: -webkit-linear-gradient(top, #8BABC9 10%, #345D81 100%);
+    background: linear-gradient(to bottom, #536B48 10%, #7D976C 100%);
+}
+
+.btn-remove-location {
+    background: -webkit-linear-gradient(top, #BF810A 40%, #7A4524 100%);
+    background: linear-gradient(to bottom, #BF810A 40%, #7A4524 100%);
+}
+.btn-remove-location:hover {
+    background: -webkit-linear-gradient(top, #BF810A 20%, #7A4524 100%);
+    background: linear-gradient(to bottom, #BF810A 20%, #7A4524 100%);
+}
+
+.btn-clear-field {
+    margin-left: -2.2rem;
+    margin-right: 0.2rem;
+    background: #CCC;
+    opacity: 0.6;
+    color: #FFF;
+    box-shadow: none;
+    text-shadow: 1px 1px 0 #333;
+}
+.btn-clear-field:hover {
+    background: #E33;
+    box-shadow: none;
+}
