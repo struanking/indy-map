@@ -21,7 +21,7 @@ define([
 
         el: '#map',
 
-        initialize: function (options) {
+        initialize: function () {
             this.mapView = new MapView();
             this.listenTo(locations, 'reset', this.clearCanvas);
             this.listenTo(locations, 'change:clearCanvas', this.clearCanvas);
